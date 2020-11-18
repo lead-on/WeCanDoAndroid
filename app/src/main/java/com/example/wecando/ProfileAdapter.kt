@@ -10,6 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
+// git test branch develop
+
 class ProfileAdapter(val profileList: ArrayList<Profiles>, val nextIntent: Intent) : RecyclerView.Adapter<ProfileAdapter.CustomViewHolder>() {
 
     //맨 첨에 실행댐 (뷰 생성시)
