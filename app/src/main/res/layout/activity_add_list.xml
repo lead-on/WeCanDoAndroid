@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddListActivity"
+    android:background="#f3f2f7"
+    android:paddingRight="14dp"
+    android:paddingLeft="14dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp" >
+        <TextView
+            android:id="@+id/tv_header_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:textColor="#333333"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/tv_header_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="완료"
+            android:textColor="#333333"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_add_list_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/icon_black"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/et_add_list_title"
+        android:layout_marginTop="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/list_bg"
+        android:gravity="center"
+        android:textStyle="normal"
+        android:textSize="26sp"
+        android:textColor="#333333" />
+
+    <LinearLayout
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_circle_red"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_red" />
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_orange"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_orange" />
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_salgu"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_salgu" />
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_light_green"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_light_green" />
+
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_green"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_green" />
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_skyblue"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_skyblue" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_circle_blue"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_blue" />
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_purple"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_purple" />
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_grey"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_grey" />
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_black"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_black" />
+
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_light_brown"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_light_brown" />
+
+        <ImageButton
+            android:layout_marginLeft="14dp"
+            android:id="@+id/ib_circle_brown"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_brown" />
+
+    </LinearLayout>
+
+</LinearLayout>
