@@ -1,5 +1,6 @@
 package com.example.wecando
 
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,12 +26,25 @@ class AddListActivity : AppCompatActivity() {
         }
 
         tv_header_complete.setOnClickListener {
-            val dbHelper = DBHelper(this, "local_db.db", null, 5)
+            val dbHelper = DBHelper(this, "local_db.db", null, 7)
             val database = dbHelper.writableDatabase
-            var list_title = et_add_list_title.text.trim()
+            var list_title = et_add_list_title.text.trim().toString()
             if (list_title.length >= 1) {
-                var insertQuery = "INSERT INTO t_list('l_title', 'l_bg_tag', 'l_order') values('${list_title}', '${tag}', '2')"
-                database.execSQL(insertQuery)
+
+//                var contentValues = ContentValues()
+//                contentValues.put("l_title", list_title)
+//                contentValues.put("l_bg_tag", tag)
+//                database.insert("list_t", null, )
+
+                var selectMaxOrder = "SELECT IFNULL(MAX(l_order)+1, 1) AS cnt FROM t_list;"
+                var cursor = database.rawQuery(selectMaxOrder, null)
+
+                while(cursor.moveToNext()) {
+                    var maxOrder = cursor.getInt(cursor.getColumnIndex("cnt"))
+                    Log.d(TAG, "max Order: ${maxOrder.toString()}")
+                    var insertQuery = "INSERT INTO t_list('l_title', 'l_bg_tag', 'l_order') values('${list_title}', '${tag}'," + "(SELECT IFNULL(MAX(l_order)+1, 1) FROM t_list));"
+                    database.execSQL(insertQuery)
+                }
 
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()

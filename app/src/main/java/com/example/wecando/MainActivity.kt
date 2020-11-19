@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), ItemDragListener  {
 
         var TAG:String = "로그"
 
-        val dbHelper = DBHelper(this, "local_db.db", null, 5)
+        val dbHelper = DBHelper(this, "local_db.db", null, 7)
         val database = dbHelper.writableDatabase
 
 //        var inserQuery = "INSERT INTO t_list('l_title', 'l_img') values('Title_Test', 'Img_Test')"
@@ -29,18 +29,18 @@ class MainActivity : AppCompatActivity(), ItemDragListener  {
 //        var DropQuery = "DROP TABLE t_list"
 //        database.execSQL(DropQuery)
 
+//        var deleteQuery = "DELETE FROM t_list"
+//        database.execSQL(deleteQuery)
+
         val profileList = arrayListOf<Profiles>()
 
         var selectQuery = "SELECT * FROM t_list"
         var cursor = database.rawQuery(selectQuery, null)
 
-//        var selectQuery = "SELECT * FROM t_list"
-//        var cursor = database.rawQuery(selectQuery, null)
-//
-//        while(cursor.moveToNext()) {
-//            profileList.add(Profiles(cursor.getString(cursor.getColumnIndex("l_bg_tag")), cursor.getString(cursor.getColumnIndex("l_title")), cursor.getInt(cursor.getColumnIndex("l_id")), cursor.getInt(cursor.getColumnIndex("l_order")), 0))
+        while(cursor.moveToNext()) {
+            profileList.add(Profiles(cursor.getString(cursor.getColumnIndex("l_bg_tag")), cursor.getString(cursor.getColumnIndex("l_title")), cursor.getInt(cursor.getColumnIndex("l_id")), cursor.getInt(cursor.getColumnIndex("l_order")), 0))
 //            Log.d(TAG, "order: ${cursor.getInt(cursor.getColumnIndex("l_order")).toString()}")
-//        }
+        }
 
         var layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         var adapter = ProfileAdapter(profileList)
@@ -74,7 +74,12 @@ class MainActivity : AppCompatActivity(), ItemDragListener  {
                 itemTouchHelper.attachToRecyclerView(rv_list)
 
             } else {
-                Log.d(TAG, "profile size: ${profileList[0].title}")
+                for (i in 0..profileList.size) {
+
+//                    profileList[i].order =
+
+                }
+
                 tv_header_btn.text = "편집"
                 tv_header_btn.tag = "modify"
            }
