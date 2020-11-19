@@ -37,9 +37,11 @@
 
     <ImageView
         android:id="@+id/iv_add_list_image"
+        android:padding="10dp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/icon_black"
+        android:background="@drawable/circle_black"
+        android:src="@drawable/ic_baseline_menu_24"
         android:layout_gravity="center_horizontal" />
 
     <EditText
@@ -61,12 +63,16 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:tag="RED"
+            android:onClick='changeColor'
             android:id="@+id/ib_circle_red"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:background="@drawable/circle_red" />
 
         <ImageButton
+            android:tag="ORANGE"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_orange"
             android:layout_width="44dp"
@@ -74,6 +80,8 @@
             android:background="@drawable/circle_orange" />
 
         <ImageButton
+            android:tag="SALGU"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_salgu"
             android:layout_width="44dp"
@@ -81,6 +89,8 @@
             android:background="@drawable/circle_salgu" />
 
         <ImageButton
+            android:tag="LIGHT_GREEN"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_light_green"
             android:layout_width="44dp"
@@ -89,6 +99,8 @@
 
 
         <ImageButton
+            android:tag="GREEN"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_green"
             android:layout_width="44dp"
@@ -96,6 +108,8 @@
             android:background="@drawable/circle_green" />
 
         <ImageButton
+            android:tag="SKYBLUE"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_skyblue"
             android:layout_width="44dp"
@@ -111,12 +125,16 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:tag="BLUE"
+            android:onClick='changeColor'
             android:id="@+id/ib_circle_blue"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:background="@drawable/circle_blue" />
 
         <ImageButton
+            android:tag="PURPLE"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_purple"
             android:layout_width="44dp"
@@ -124,6 +142,8 @@
             android:background="@drawable/circle_purple" />
 
         <ImageButton
+            android:tag="GREY"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_grey"
             android:layout_width="44dp"
@@ -131,6 +151,8 @@
             android:background="@drawable/circle_grey" />
 
         <ImageButton
+            android:tag="BLACK"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_black"
             android:layout_width="44dp"
@@ -139,6 +161,8 @@
 
 
         <ImageButton
+            android:tag="LIGHT_BROWN"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_light_brown"
             android:layout_width="44dp"
@@ -146,6 +170,8 @@
             android:background="@drawable/circle_light_brown" />
 
         <ImageButton
+            android:tag="BROWN"
+            android:onClick='changeColor'
             android:layout_marginLeft="14dp"
             android:id="@+id/ib_circle_brown"
             android:layout_width="44dp"

@@ -15,7 +15,8 @@ class DBHelper(
         var sql : String = "CREATE TABLE if not exists t_list (" +
                 "l_id integer primary key autoincrement," +
                 "l_title text," +
-                "l_img text);";
+                "l_bg_tag String," +
+                "l_order integer);";
         db.execSQL(sql)
     }
 

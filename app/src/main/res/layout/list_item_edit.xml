@@ -5,29 +5,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/list_bg"
+        android:layout_margin="8dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:background="@drawable/list_bg">
+        android:elevation="8dp">
+
+        <ImageView
+            android:id="@+id/iv_btn_delete"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/circle_red"
+            android:src="@drawable/ic_baseline_horizontal_rule_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_list_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginStart="10dp"
             android:padding="6dp"
             android:src="@drawable/ic_baseline_menu_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_btn_delete"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -38,21 +48,21 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:text="목록"
-            android:textSize="18sp"
             android:textColor="#333333"
+            android:textSize="18sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_list_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_list_detail_cnt"
+            android:id="@+id/tv_btn_modify_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="15dp"
-            android:text="0 >"
+            android:text="수정"
             android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="normal"

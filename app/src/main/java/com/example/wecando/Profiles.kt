@@ -1,4 +1,6 @@
 package com.example.wecando
 
-class Profiles(val imgSrc: String, val title: String = "NULL", val detailCnt: Int = 0) {
+import android.graphics.drawable.Drawable
+
+class Profiles(val bg_tag: String, val title: String = "NULL", val id: Int, val order: Int, val detailCnt: Int = 0) {
 }
