@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">wecando</string>
+    <string name="InsertQuery">INSERT INTO t_list(l_id, l_title, l_bg_tag, l_order) VALUES</string>
 </resources>

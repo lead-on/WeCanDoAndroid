@@ -16,38 +16,67 @@ class AddListActivity : AppCompatActivity() {
     var tag = "BLACK"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        getResources()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_list)
+
+        //수정일때
+        if (intent.hasExtra("title")) {
+            var title = intent.getStringExtra("title").toString()
+            et_add_list_title.setText(title)
+            tag = intent.getStringExtra("tag").toString()
+
+            when (tag) {
+                "BLACK" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_black)
+                "RED" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_red)
+                "ORANGE" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_orange)
+                "SALGU" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_salgu)
+                "LIGHT_GREEN" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_light_green)
+                "GREEN" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_green)
+                "SKYBLUE" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_skyblue)
+                "BLUE" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_blue)
+                "PURPLE" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_purple)
+                "GREY" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_grey)
+                "LIGHT_BROWN" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_light_brown)
+                "BROWN" -> iv_add_list_image.setBackgroundResource(R.drawable.circle_brown)
+
+                else -> iv_add_list_image.setBackgroundResource(R.drawable.circle_black)
+            }
+        }
 
         tv_header_cancle.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
+        //완료버튼 클릭시
         tv_header_complete.setOnClickListener {
             val dbHelper = DBHelper(this, "local_db.db", null, 7)
             val database = dbHelper.writableDatabase
             var list_title = et_add_list_title.text.trim().toString()
             if (list_title.length >= 1) {
 
-//                var contentValues = ContentValues()
-//                contentValues.put("l_title", list_title)
-//                contentValues.put("l_bg_tag", tag)
-//                database.insert("list_t", null, )
+                    var selectMaxOrder = "SELECT IFNULL(MAX(l_order)+1, 1) AS cnt FROM t_list;"
+                    var cursor = database.rawQuery(selectMaxOrder, null)
 
-                var selectMaxOrder = "SELECT IFNULL(MAX(l_order)+1, 1) AS cnt FROM t_list;"
-                var cursor = database.rawQuery(selectMaxOrder, null)
+                    while(cursor.moveToNext()) {
+                        var maxOrder = cursor.getInt(cursor.getColumnIndex("cnt"))
 
-                while(cursor.moveToNext()) {
-                    var maxOrder = cursor.getInt(cursor.getColumnIndex("cnt"))
-                    Log.d(TAG, "max Order: ${maxOrder.toString()}")
-                    var insertQuery = "INSERT INTO t_list('l_title', 'l_bg_tag', 'l_order') values('${list_title}', '${tag}'," + "(SELECT IFNULL(MAX(l_order)+1, 1) FROM t_list));"
-                    database.execSQL(insertQuery)
-                }
+                        //수정일때
+                        if (intent.hasExtra("title")) {
+                            var id = intent.getIntExtra("id", 0)
+                            Log.d(TAG, "id: ${id.toString()}")
+                            var updateQuery = "UPDATE t_list SET l_title = '${list_title}', l_bg_tag = '${tag}' where l_id = ${id};"
+                            database.execSQL(updateQuery)
+                        } else { // 추가일때
+                            var insertQuery = "INSERT INTO t_list('l_title', 'l_bg_tag', 'l_order') values('${list_title}', '${tag}'," + "(SELECT IFNULL(MAX(l_order)+1, 1) FROM t_list));"
+                            database.execSQL(insertQuery)
+                        }
+                    }
 
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
+
             } else {
                 Toast.makeText(this, "목록 이름을 확인해주세요!", Toast.LENGTH_LONG).show()
             }
