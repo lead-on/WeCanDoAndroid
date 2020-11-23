@@ -51,7 +51,7 @@ class AddListActivity : AppCompatActivity() {
 
         //완료버튼 클릭시
         tv_header_complete.setOnClickListener {
-            val dbHelper = DBHelper(this, "local_db.db", null, 7)
+            val dbHelper = DBHelper(this, "local_db.db", null, 9)
             val database = dbHelper.writableDatabase
             var list_title = et_add_list_title.text.trim().toString()
             if (list_title.length >= 1) {
@@ -68,9 +68,11 @@ class AddListActivity : AppCompatActivity() {
                             Log.d(TAG, "id: ${id.toString()}")
                             var updateQuery = "UPDATE t_list SET l_title = '${list_title}', l_bg_tag = '${tag}' where l_id = ${id};"
                             database.execSQL(updateQuery)
+                            database.close()
                         } else { // 추가일때
                             var insertQuery = "INSERT INTO t_list('l_title', 'l_bg_tag', 'l_order') values('${list_title}', '${tag}'," + "(SELECT IFNULL(MAX(l_order)+1, 1) FROM t_list));"
                             database.execSQL(insertQuery)
+                            database.close()
                         }
                     }
 
