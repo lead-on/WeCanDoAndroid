@@ -14,12 +14,18 @@
         android:layout_height="60dp"
         android:background="@drawable/detail_header_border">
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+            android:layout_centerVertical="true"/>
+
         <TextView
             android:id="@+id/tv_header_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="14dp"
-            android:text="@string/backString"
+            android:layout_marginLeft="22dp"
+            android:text="목록"
             android:textColor="#333333"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -41,8 +47,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:onClick="CancleDetailModify">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_details"
@@ -56,8 +63,8 @@
             android:layout_marginTop="10dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginEnd="6dp"
                 android:src="@drawable/ic_baseline_add_circle_24"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -72,7 +79,7 @@
                 android:layout_marginEnd="16dp"
                 android:text="새로운 할일"
                 android:textColor="#333333"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

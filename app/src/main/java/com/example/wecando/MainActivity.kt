@@ -33,32 +33,28 @@ class MainActivity : AppCompatActivity(), ItemDragListener {
 //        database.execSQL(deleteQuery)
 //        database.close()
 
-        val profileList = arrayListOf<ListModel>()
+        val lists = arrayListOf<ListModel>()
 
         var selectQuery = "SELECT * FROM t_list ORDER BY l_order ASC"
         var cursor = database.rawQuery(selectQuery, null)
 
         //DB에서 목록들가져와서 profilelist에 넣음
         while(cursor.moveToNext()) {
-            profileList.add(ListModel(cursor.getString(cursor.getColumnIndex("l_bg_tag")), cursor.getString(cursor.getColumnIndex("l_title")), cursor.getInt(cursor.getColumnIndex("l_id")), cursor.getInt(cursor.getColumnIndex("l_order")), 0))
+            lists.add(ListModel(ListModel.ITEM, cursor.getString(cursor.getColumnIndex("l_bg_tag")), cursor.getString(cursor.getColumnIndex("l_title")), cursor.getInt(cursor.getColumnIndex("l_id")), cursor.getInt(cursor.getColumnIndex("l_order")), 0))
 //            Log.d(TAG, "order: ${cursor.getInt(cursor.getColumnIndex("l_order")).toString()}")
         }
+        lists.add(ListModel(ListModel.BUTTON,"", "", 60000, 60000, 0))
         database.close()
 
         var layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         //일반모드 어댑터
-        var adapter = ListAdapter(profileList)
+        var adapter = ListAdapter(lists, this)
 
         rv_list.layoutManager = layoutManager
         rv_list.setHasFixedSize(false)
         rv_list.adapter = adapter
 //        rv_list.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
-        //목록추가 클릭 이벤트
-        tv_add_list.setOnClickListener {
-            startActivity(Intent(this, AddListActivity::class.java))
-            finish()
-        }
 
         //편집/완료 버튼 클릭이벤트
         tv_header_btn.setOnClickListener {
@@ -68,7 +64,8 @@ class MainActivity : AppCompatActivity(), ItemDragListener {
                 rv_list.layoutManager =
                     LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 rv_list.setHasFixedSize(true)
-                val editAdapter = EditAdapter(profileList, this, this)
+                lists.removeAt(lists.size-1)
+                val editAdapter = EditAdapter(lists, this, this)
                 rv_list.adapter = editAdapter
                 tv_header_btn.text = "완료"
                 tv_header_btn.tag = "complete"
@@ -78,28 +75,33 @@ class MainActivity : AppCompatActivity(), ItemDragListener {
 
             } else { //완료
 
-                var InsertQuery = getString(R.string.InsertQuery)
+                if (lists.size > 0) {
+                    var InsertQuery = getString(R.string.InsertQuery)
 
-                for (i in 0..profileList.size-1) {
-                    profileList[i].order = i+1
-                    InsertQuery += "('${profileList[i].id}', '${profileList[i].title}', '${profileList[i].bg_tag}', '${profileList[i].order}')"
-                    if (i != profileList.size-1) {
-                        InsertQuery += ", "
+                    for (i in 0..lists.size-1) {
+                        lists[i].order = i+1
+                        InsertQuery += "('${lists[i].id}', '${lists[i].title}', '${lists[i].bg_tag}', '${lists[i].order}')"
+                        if (i != lists.size-1) {
+                            InsertQuery += ", "
+                        }
                     }
+
+                    val database = dbHelper.writableDatabase
+                    var deleteQuery = "DELETE FROM t_list"
+                    database.execSQL(deleteQuery)
+                    database.execSQL(InsertQuery)
+                    database.close()
+
+                    rv_list.removeAllViewsInLayout()
+                    rv_list.layoutManager =
+                        LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                    rv_list.setHasFixedSize(true)
+                    lists.add(ListModel(ListModel.BUTTON,"", "", 60000, 60000, 0))
+                    rv_list.adapter = adapter
+                    tv_header_btn.text = "편집"
+                    tv_header_btn.tag = "modify"
                 }
 
-                var deleteQuery = "DELETE FROM t_list"
-                database.execSQL(deleteQuery)
-                database.execSQL(InsertQuery)
-                database.close()
-
-                rv_list.removeAllViewsInLayout()
-                rv_list.layoutManager =
-                    LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                rv_list.setHasFixedSize(true)
-                rv_list.adapter = adapter
-                tv_header_btn.text = "편집"
-                tv_header_btn.tag = "modify"
            }
         }
     }

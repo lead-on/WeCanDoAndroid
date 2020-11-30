@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".AddListActivity"
     android:background="#f3f2f7"
-    android:paddingRight="14dp"
-    android:paddingLeft="14dp"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -19,17 +19,18 @@
             android:layout_height="wrap_content"
             android:text="취소"
             android:textColor="#333333"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textStyle="normal"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true" />
         <TextView
             android:id="@+id/tv_header_complete"
+            android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="완료"
-            android:textColor="#333333"
-            android:textSize="20sp"
+            android:textColor="#999999"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true" />
@@ -48,135 +49,195 @@
         android:id="@+id/et_add_list_title"
         android:layout_marginTop="32dp"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="54dp"
         android:background="@drawable/list_bg"
         android:gravity="center"
         android:textStyle="normal"
-        android:textSize="26sp"
+        android:textSize="24sp"
         android:textColor="#333333" />
 
     <LinearLayout
-        android:layout_marginTop="32dp"
+        android:id="@+id/ll_color_1"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:tag="RED"
             android:onClick='changeColor'
-            android:id="@+id/ib_circle_red"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_red" />
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_red" />
+        </RelativeLayout>
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="ORANGE"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_orange"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_orange" />
+            android:onClick='changeColor'>
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_orange" />
+        </RelativeLayout>
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="SALGU"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_salgu"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_salgu" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_salgu" />
+        </RelativeLayout>
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="LIGHT_GREEN"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_light_green"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_light_green" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_light_green" />
+        </RelativeLayout>
 
-
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="GREEN"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_green"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_green" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_green" />
+        </RelativeLayout>
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="SKYBLUE"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_skyblue"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_skyblue" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_skyblue" />
+        </RelativeLayout>
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/ll_color_2"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="BLUE"
-            android:onClick='changeColor'
-            android:id="@+id/ib_circle_blue"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_blue" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_blue" />
+        </RelativeLayout>
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="PURPLE"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_purple"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_purple" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_purple" />
+        </RelativeLayout>
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="GREY"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_grey"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_grey" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_grey" />
+        </RelativeLayout>
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="BLACK"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_black"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_black" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_black" />
+        </RelativeLayout>
 
-
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="LIGHT_BROWN"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_light_brown"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_light_brown" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_light_brown" />
+        </RelativeLayout>
 
-        <ImageButton
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:padding="5dp"
             android:tag="BROWN"
-            android:onClick='changeColor'
-            android:layout_marginLeft="14dp"
-            android:id="@+id/ib_circle_brown"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/circle_brown" />
+            android:onClick='changeColor' >
+            <ImageButton
+                android:clickable="false"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_brown" />
+        </RelativeLayout>
 
     </LinearLayout>
 

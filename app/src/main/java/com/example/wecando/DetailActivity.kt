@@ -1,11 +1,16 @@
 package com.example.wecando
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.InsetDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,20 +21,30 @@ import kotlinx.android.synthetic.main.detail_item.*
 import kotlinx.android.synthetic.main.detail_item_edit.*
 import kotlinx.android.synthetic.main.detail_item_edit.view.*
 import java.text.FieldPosition
+import java.util.*
 
 class DetailActivity : AppCompatActivity(), ItemDragListener {
 
+    var curStatus = "NORMAL"
+    var editTitle = ""
+    var editPosition = 0
+
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var adapter: DetailAdapter
+    var t_id: Int = 0
+    val detailList = arrayListOf<DetailModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        t_id = intent.getIntExtra("t_id", 0)
+
         val dbHelper = DBHelper(this, "local_db.db", null, 9)
         val database = dbHelper.writableDatabase
-        var t_id = intent.getIntExtra("t_id", 0)
 
-        val detailList = arrayListOf<DetailModel>()
+
         var selectQuery = "SELECT * FROM t_detail WHERE t_id = '${t_id}' ORDER BY d_order ASC"
         var cursor = database.rawQuery(selectQuery, null)
 
@@ -41,7 +56,7 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
 
         var layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        var adapter = DetailAdapter(detailList, this, this)
+        adapter = DetailAdapter(detailList, this, this)
 
         rv_details.layoutManager = layoutManager
         rv_details.setHasFixedSize(true)
@@ -60,18 +75,19 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
         layout_add_detail.setOnClickListener {
             var isDuplicated = false
             for (i in detailList) {
-                if (i.status == 1) {
+                if (i.status == DetailModel.ADD) {
                     isDuplicated = true
                 }
             }
 
             //EDIT 상태인 아이템이 없을때만 아이템 추가
             if (!isDuplicated) {
+
                 val database = dbHelper.writableDatabase
                 var EditselectQuery = "SELECT IFNULL(MAX(d_id), 1) AS MaxId, IFNULL(MAX(d_order), 1) AS MaxOrder FROM t_detail"
                 var cursor = database.rawQuery(EditselectQuery, null)
                 while (cursor.moveToNext()) {
-                    detailList.add(DetailModel(DetailModel.EDIT,cursor.getInt(cursor.getColumnIndex("MaxId")), "", cursor.getInt(cursor.getColumnIndex("MaxOrder"))))
+                    detailList.add(DetailModel(DetailModel.ADD,cursor.getInt(cursor.getColumnIndex("MaxId")), "", cursor.getInt(cursor.getColumnIndex("MaxOrder"))))
                 }
                 cursor.close()
                 database.close()
@@ -83,51 +99,79 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
                 rv_details.adapter = adapter
                 tv_detail_header_btn.text = "추가"
                 tv_detail_header_btn.tag = "add"
+                layout_add_detail.visibility = View.INVISIBLE
 
             } else {
                 Toast.makeText(this, "먼저 추가한 일정부터 완성해주세요!", Toast.LENGTH_LONG).show()
             }
-
         }
 
         //추가 버튼 클릭
         tv_detail_header_btn.setOnClickListener {
-
             when (it.tag) {
                 "add" -> {
                     val database = dbHelper.writableDatabase
+                    var title = rv_details.et_detail_title.text.trim()
 
-                    var title = rv_details.et_detail_title.text
-                    var order = detailList.get(detailList.size - 1).order
-                    var insertQuery =
-                        "INSERT INTO t_detail(t_id, d_title, d_order, d_status) VALUES(${t_id}, '${title}', '${order}', '0')"
-                    database.execSQL(insertQuery)
-                    detailList.clear()
+                    //title이 빈값이 아닐때
+                    if (title.length > 1) {
+                        var selectMaxOrder =
+                            "SELECT IFNULL(MAX(d_order), 1) AS cnt FROM t_detail;"
+                        var C = database.rawQuery(selectMaxOrder, null)
+                        var MaxOrder = 0
+                        while (C.moveToNext()) {
+                            MaxOrder = C.getInt(C.getColumnIndex("cnt"))
+                        }
+                        var order = MaxOrder +1
+                        var isModify = false
+                        var ModifyId = 0
+                        for (i in detailList) {
+                            if (i.status == DetailModel.MODIFY) {
+                                isModify = true
+                                ModifyId = i.id
+                                order = i.order
+                            }
+                        }
 
-                    var c = database.rawQuery(selectQuery, null)
-                    while (c.moveToNext()) {
-                        detailList.add(
-                            DetailModel(
-                                c.getInt(c.getColumnIndex("d_status")),
-                                c.getInt(c.getColumnIndex("d_id")),
-                                c.getString(c.getColumnIndex("d_title")).toString(),
-                                c.getInt(c.getColumnIndex("d_order"))
+                        if (isModify) {
+                            var deleteQuery = "DELETE FROM t_detail WHERE d_id = '${ModifyId}'"
+                            database.execSQL(deleteQuery)
+                        }
+
+                        var insertQuery =
+                            "INSERT INTO t_detail(t_id, d_title, d_order, d_status) VALUES(${t_id}, '${title}', '${order}', '0')"
+                        database.execSQL(insertQuery)
+                        detailList.clear()
+
+                        var c = database.rawQuery(selectQuery, null)
+                        while (c.moveToNext()) {
+                            detailList.add(
+                                DetailModel(
+                                    c.getInt(c.getColumnIndex("d_status")),
+                                    c.getInt(c.getColumnIndex("d_id")),
+                                    c.getString(c.getColumnIndex("d_title")).toString(),
+                                    c.getInt(c.getColumnIndex("d_order"))
+                                )
                             )
-                        )
+                        }
+                        c.close()
+                        database.close()
+                        adapter.notifyDataSetChanged()
+
+//                        rv_details.removeAllViewsInLayout()
+//                        rv_details.layoutManager =
+//                            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+//                        rv_details.setHasFixedSize(true)
+//                        rv_details.adapter = adapter
+
+                        tv_detail_header_btn.text = "편집"
+                        tv_detail_header_btn.tag = "modify"
+                        layout_add_detail.visibility = View.VISIBLE
+                        curStatus = "NORMAL"
+
+                    } else { // title 빈값일때
+                        Toast.makeText(this, "제목을 다시 확인해주세요!", Toast.LENGTH_LONG).show()
                     }
-                    c.close()
-                    database.close()
-                    adapter.notifyDataSetChanged()
-
-                    rv_details.removeAllViewsInLayout()
-                    rv_details.layoutManager =
-                        LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                    rv_details.setHasFixedSize(true)
-                    rv_details.adapter = adapter
-
-                    tv_detail_header_btn.text = "편집"
-                    tv_detail_header_btn.tag = "modify"
-
                 }
                 "modify" -> {
                     Toast.makeText(this, "편집버튼 클릭", Toast.LENGTH_LONG).show()
@@ -144,18 +188,13 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
 
     }
 
-    fun AddDetail(title: String, itemCnt: Int) {
-        val dbHelper = DBHelper(this, "local_db.db", null, 9)
-        val database = dbHelper.writableDatabase
-        var InsertQuery = "INSERT INTO t_detail(d_title, d_status, d_order) VALUES('${title}', '0'," + "(SELECT IFNULL(MAX(d_order)+1, 1) FROM t_detail));"
-        database.execSQL(InsertQuery)
-        database.close()
-    }
-
-    fun FinishDetail(id: Int) {
+    fun FinishDetail(id: Int, status: Int) {
         val dbHelper = DBHelper(this, "local_db.db", null, 9)
         val database = dbHelper.writableDatabase
         var updateQuery = "UPDATE t_detail SET d_status = '2' WHERE d_id = '${id}'"
+        if (status == DetailModel.FINISH) {
+            updateQuery = "UPDATE t_detail SET d_status = '0' WHERE d_id = '${id}'"
+        }
         database.execSQL(updateQuery)
         database.close()
     }
@@ -166,6 +205,40 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
         var deleteQuery = "DELETE FROM t_detail WHERE d_id = '${id}'"
         database.execSQL(deleteQuery)
         database.close()
+        adapter.notifyDataSetChanged()
+    }
+
+    fun ModifyDetail(id: Int, position: Int, title: String) {
+        editTitle = title
+        editPosition = position
+        curStatus = "EDIT"
+        tv_detail_header_btn.text = "완료"
+        tv_detail_header_btn.tag = "add"
+        layout_add_detail.visibility = View.INVISIBLE
+    }
+
+    fun CancleDetailModify(view: View) {
+        if (curStatus == "EDIT") {
+            val dbHelper = DBHelper(this, "local_db.db", null, 9)
+            val database = dbHelper.writableDatabase
+
+            var selectQuery = "SELECT * FROM t_detail WHERE t_id = '${t_id}' ORDER BY d_order ASC"
+            var cursor = database.rawQuery(selectQuery, null)
+
+            detailList.clear()
+            while (cursor.moveToNext()) {
+                detailList.add(DetailModel(cursor.getInt(cursor.getColumnIndex("d_status")), cursor.getInt(cursor.getColumnIndex("d_id")), cursor.getString(cursor.getColumnIndex("d_title")).toString(), cursor.getInt(cursor.getColumnIndex("d_order"))))
+            }
+
+            cursor.close()
+            database.close()
+            adapter.notifyDataSetChanged()
+
+            tv_detail_header_btn.text = "편집"
+            tv_detail_header_btn.tag = "modify"
+            layout_add_detail.visibility = View.VISIBLE
+        }
+
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
