@@ -1,6 +1,7 @@
 package com.example.wecando
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextSwitcher
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -25,6 +27,10 @@ class AddListActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_list)
+
+        ll_add_main.setOnClickListener {
+            CloseKeyboard()
+        }
 
         //수정일때
         if (intent.hasExtra("title")) {
@@ -52,6 +58,22 @@ class AddListActivity : AppCompatActivity() {
             }
         }
 
+        for (i in 0..ll_color_1.childCount-1) {
+            if (ll_color_1.getChildAt(i).getTag().toString() == tag) {
+                ll_color_1.getChildAt(i).setBackgroundResource(R.drawable.selected_color_bg)
+            }
+
+        }
+        for (i in 0..ll_color_2.childCount-1) {
+            if (ll_color_2.getChildAt(i).getTag().toString() == tag) {
+                ll_color_2.getChildAt(i).setBackgroundResource(R.drawable.selected_color_bg)
+            }
+        }
+
+        UpKeyboard()
+        et_add_list_title.setSelection(et_add_list_title.text.length)
+
+
         et_add_list_title.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
 
@@ -66,6 +88,7 @@ class AddListActivity : AppCompatActivity() {
             }
         })
 
+
         tv_header_cancle.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -73,6 +96,9 @@ class AddListActivity : AppCompatActivity() {
 
         //완료버튼 클릭시
         tv_header_complete.setOnClickListener {
+
+            CloseKeyboard()
+
             val dbHelper = DBHelper(this, "local_db.db", null, 9)
             val database = dbHelper.writableDatabase
             var list_title = et_add_list_title.text.trim().toString()
@@ -95,9 +121,7 @@ class AddListActivity : AppCompatActivity() {
                             database.execSQL(insertQuery)
                             database.close()
                         }
-
                     }
-
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
 
@@ -148,4 +172,17 @@ class AddListActivity : AppCompatActivity() {
         }
     }
 
+    fun CloseKeyboard() {
+        var view = this.currentFocus
+        if(view != null)
+        {
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
+    fun UpKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+    }
 }

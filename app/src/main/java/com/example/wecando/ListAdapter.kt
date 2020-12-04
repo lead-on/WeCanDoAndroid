@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_add.view.*
 import kotlin.collections.ArrayList
@@ -70,7 +71,10 @@ class ListAdapter(val lists: ArrayList<ListModel>, val context: Context ) : Recy
                 val nextIntent = Intent(it.context, DetailActivity::class.java)
                 var t_id = lists.get(position).id
                 nextIntent.putExtra("t_id", t_id)
-                it.context.startActivity(nextIntent)
+
+                //it.context랑 (context as MainActivity) 뭐가 다른지 몰겠어서 둘다써놈 (it은 finish나 멤버함수 접근안댐댐)
+               it.context.startActivity(nextIntent)
+                (context as MainActivity).finish()
             }
         } else {
 
@@ -99,6 +103,7 @@ class ListAdapter(val lists: ArrayList<ListModel>, val context: Context ) : Recy
         }
         override fun onLongClick(p0: View?): Boolean {
             //롱클릭 이벤트 리스너
+            (context as MainActivity).LongClicked()
             return true
         }
     }

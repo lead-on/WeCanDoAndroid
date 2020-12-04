@@ -1,6 +1,6 @@
 package com.example.wecando
 
-class DetailModel(val status: Int, val id: Int, val title: String, val order: Int) {
+class DetailModel(var status: Int, val id: Int, var title: String, var order: Int) {
     companion object {
         const val RUNNING = 0
         const val ADD = 1

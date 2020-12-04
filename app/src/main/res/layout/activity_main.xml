@@ -12,18 +12,33 @@
         android:id="@+id/layout_header"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/header_border"
-        android:gravity="right">
+        android:background="@drawable/header_border">
+
         <TextView
-            android:id="@+id/tv_header_btn"
-            android:tag="modify"
+            android:id="@+id/tv_main_header_cancle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="편집"
+            android:text="취소"
+            android:layout_marginLeft="14dp"
+            android:visibility="invisible"
+            android:clickable="false"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/tv_header_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="완료"
+            android:visibility="invisible"
+            android:clickable="false"
             android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="14dp"/>
     </RelativeLayout>
 

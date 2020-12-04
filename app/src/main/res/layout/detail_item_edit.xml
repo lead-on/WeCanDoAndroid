@@ -7,26 +7,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="20dp">
+    android:paddingLeft="20dp"
+    tools:context=".DetailActivity">
 
-    <EditText
-        android:id="@+id/et_detail_title"
-        android:tag=""
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:textCursorDrawable="@drawable/et_cursor"
-        android:hint="새로운 할일 입력"
-        android:textStyle="normal"
-        android:textColor="#222222"
-        android:textSize="21sp">
-        <requestFocus/>
-    </EditText>
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#ABABAB"/>
+        android:layout_height="55dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_detail_title"
+            android:tag=""
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textCursorDrawable="@drawable/et_cursor"
+            android:hint="새로운 할일 입력"
+            android:textStyle="normal"
+            android:textColor="#222222"
+            android:textSize="21sp">
+            <requestFocus/>
+        </EditText>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ABABAB"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

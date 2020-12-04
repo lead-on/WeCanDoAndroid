@@ -29,6 +29,7 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
     var editTitle = ""
     var editPosition = 0
 
+    private lateinit var itemTouchHelperCallback: ItemTouchHelperCallback
     private lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var adapter: DetailAdapter
     var t_id: Int = 0
@@ -62,11 +63,22 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
         rv_details.setHasFixedSize(true)
         rv_details.adapter = adapter
 
-        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapter))
+        itemTouchHelperCallback = ItemTouchHelperCallback(adapter, true).apply {
+            setClamp(200f)
+        }
+
+        itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(rv_details)
+        rv_details.apply {
+            setOnTouchListener { _, _ ->
+                itemTouchHelperCallback.removePreviousClamp(this)
+                false
+            }
+        }
 
         //목록뒤로가기 클릭 이벤트
         tv_header_back.setOnClickListener {
+            CloseKeyboard()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
@@ -82,6 +94,9 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
 
             //EDIT 상태인 아이템이 없을때만 아이템 추가
             if (!isDuplicated) {
+
+                curStatus = "ADD"
+                UpKeyboard()
 
                 val database = dbHelper.writableDatabase
                 var EditselectQuery = "SELECT IFNULL(MAX(d_id), 1) AS MaxId, IFNULL(MAX(d_order), 1) AS MaxOrder FROM t_detail"
@@ -99,6 +114,8 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
                 rv_details.adapter = adapter
                 tv_detail_header_btn.text = "추가"
                 tv_detail_header_btn.tag = "add"
+
+                tv_detail_header_btn.visibility = View.VISIBLE
                 layout_add_detail.visibility = View.INVISIBLE
 
             } else {
@@ -156,16 +173,17 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
                         }
                         c.close()
                         database.close()
-                        adapter.notifyDataSetChanged()
+//                        adapter.notifyDataSetChanged()
+                        rv_details.removeAllViewsInLayout()
+                        rv_details.layoutManager =
+                            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                        rv_details.setHasFixedSize(true)
+                        rv_details.adapter = adapter
+                        CloseKeyboard()
 
-//                        rv_details.removeAllViewsInLayout()
-//                        rv_details.layoutManager =
-//                            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-//                        rv_details.setHasFixedSize(true)
-//                        rv_details.adapter = adapter
-
-                        tv_detail_header_btn.text = "편집"
-                        tv_detail_header_btn.tag = "modify"
+                        tv_detail_header_btn.text = ""
+                        tv_detail_header_btn.tag = ""
+                        tv_detail_header_btn.visibility = View.INVISIBLE
                         layout_add_detail.visibility = View.VISIBLE
                         curStatus = "NORMAL"
 
@@ -173,15 +191,15 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
                         Toast.makeText(this, "제목을 다시 확인해주세요!", Toast.LENGTH_LONG).show()
                     }
                 }
-                "modify" -> {
-                    Toast.makeText(this, "편집버튼 클릭", Toast.LENGTH_LONG).show()
-                    tv_detail_header_btn.text = "완료"
-                    tv_detail_header_btn.tag = "complete"
-                }
                 "complete" -> {
                     Toast.makeText(this, "완료버튼 클릭", Toast.LENGTH_LONG).show()
-                    tv_detail_header_btn.text = "편집"
-                    tv_detail_header_btn.tag = "modify"
+                    tv_detail_header_btn.text = ""
+                    tv_detail_header_btn.tag = ""
+                    tv_detail_header_btn.visibility = View.INVISIBLE
+
+                }
+                else -> {
+                    Toast.makeText(this, "상태코드 에러", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -204,21 +222,66 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
         val database = dbHelper.writableDatabase
         var deleteQuery = "DELETE FROM t_detail WHERE d_id = '${id}'"
         database.execSQL(deleteQuery)
+        var selectQuery = "SELECT * FROM t_detail WHERE t_id = '${t_id}' ORDER BY d_order ASC"
+        var cursor = database.rawQuery(selectQuery, null)
+
+        rv_details.removeAllViewsInLayout()
+        detailList.clear()
+        while (cursor.moveToNext()) {
+            detailList.add(DetailModel(cursor.getInt(cursor.getColumnIndex("d_status")), cursor.getInt(cursor.getColumnIndex("d_id")), cursor.getString(cursor.getColumnIndex("d_title")).toString(), cursor.getInt(cursor.getColumnIndex("d_order"))))
+        }
+
+        rv_details.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_details.setHasFixedSize(true)
+        rv_details.adapter = adapter
+
         database.close()
+
         adapter.notifyDataSetChanged()
+        CloseKeyboard()
     }
 
-    fun ModifyDetail(id: Int, position: Int, title: String) {
+    fun ModifyDetail(id: Int, position: Int, title: String, order: Int) {
         editTitle = title
         editPosition = position
         curStatus = "EDIT"
         tv_detail_header_btn.text = "완료"
         tv_detail_header_btn.tag = "add"
+        tv_detail_header_btn.visibility = View.VISIBLE
+
+        val dbHelper = DBHelper(this, "local_db.db", null, 9)
+        val database = dbHelper.writableDatabase
+        var selectQuery = "SELECT * FROM t_detail WHERE t_id = '${t_id}' ORDER BY d_order ASC"
+
+        detailList.clear()
+        var c = database.rawQuery(selectQuery, null)
+        while (c.moveToNext()) {
+            detailList.add(
+                DetailModel(
+                    c.getInt(c.getColumnIndex("d_status")),
+                    c.getInt(c.getColumnIndex("d_id")),
+                    c.getString(c.getColumnIndex("d_title")).toString(),
+                    c.getInt(c.getColumnIndex("d_order"))
+                )
+            )
+        }
+        c.close()
+        database.close()
+
+        detailList.get(position).status = DetailModel.MODIFY
+        rv_details.removeAllViewsInLayout()
+        rv_details.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_details.setHasFixedSize(true)
+        rv_details.adapter = adapter
+
         layout_add_detail.visibility = View.INVISIBLE
+        UpKeyboard()
     }
 
-    fun CancleDetailModify(view: View) {
-        if (curStatus == "EDIT") {
+    fun CancleDetailModify(view: View = tv_header_back) {
+        if (curStatus == "EDIT" || curStatus == "ADD") {
             val dbHelper = DBHelper(this, "local_db.db", null, 9)
             val database = dbHelper.writableDatabase
 
@@ -232,16 +295,40 @@ class DetailActivity : AppCompatActivity(), ItemDragListener {
 
             cursor.close()
             database.close()
-            adapter.notifyDataSetChanged()
+//            adapter.notifyDataSetChanged()
+            rv_details.removeAllViewsInLayout()
+            rv_details.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            rv_details.setHasFixedSize(true)
+            rv_details.adapter = adapter
 
-            tv_detail_header_btn.text = "편집"
-            tv_detail_header_btn.tag = "modify"
+            tv_detail_header_btn.text = ""
+            tv_detail_header_btn.tag = ""
+            tv_detail_header_btn.visibility = View.INVISIBLE
+
             layout_add_detail.visibility = View.VISIBLE
+            CloseKeyboard()
+            curStatus = "NORMAL"
         }
 
     }
 
+    fun CloseKeyboard() {
+        var view = this.currentFocus
+
+        if(view != null)
+        {
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
         itemTouchHelper.startDrag(viewHolder)
+    }
+
+    fun UpKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 }

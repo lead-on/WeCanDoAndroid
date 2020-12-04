@@ -71,7 +71,6 @@ class EditAdapter(val profileList: ArrayList<ListModel>, val listener: ItemDragL
         holder.itemView.setOnClickListener {
 //            it.context.startActivity(nextIntent)
         }
-
     }
 
     override fun onItemMoved(from: Int, to: Int) {
