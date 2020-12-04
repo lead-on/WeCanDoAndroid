@@ -79,7 +79,6 @@ class ItemTouchHelperCallback(val listener: ItemActionListener, val isDetail: Bo
     override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
 
         if (isDetail) {
-
             val isClamped: Boolean = getTag(viewHolder)
             // 현재 View가 고정되어있지 않고 사용자가 -clamp 이상 swipe시 isClamped true로 변경 아닐시 false로 변경
             setTag(viewHolder, !isClamped && currentDx <= -clamp)

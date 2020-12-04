@@ -10,7 +10,7 @@
     android:tag="RUNNING">
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp">
+        android:layout_height="wrap_content">
         <FrameLayout
             android:layout_marginBottom="1dp"
             android:layout_width="match_parent"
@@ -23,9 +23,8 @@
                 android:layout_height="wrap_content"
                 android:text="삭제"
                 android:textColor="#ffffff"
-                android:paddingRight="14dp"
+                android:paddingRight="18dp"
                 android:layout_gravity="end|center_vertical" />
-
         </FrameLayout>
 
         <LinearLayout

@@ -2,6 +2,7 @@ package com.example.wecando
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Paint
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
@@ -166,7 +167,9 @@ class DetailAdapter(val details: ArrayList<DetailModel>, val listener: ItemDragL
     }
     inner class FinishViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.tv_detail_title_finish)
-
+        init {
+            title.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG)
+        }
     }
 
 }
